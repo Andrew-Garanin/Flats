@@ -80,40 +80,37 @@ public class FlatsList {
         System.out.print("Введите цену квартиры-> ");
         long price = sc.nextLong();
         flatsList.add(new Flat(metrics, countOfRooms, address, floor, typeOfHouse, countOfFloors, price));
-        System.out.println("Квартира добавлена" +
-                "\n***************************");
+        System.out.println("Квартира добавлена" + "\n***************************");
     }
 
     public void removeFlat() throws MyExeption {
-        if (flatsList.size() == 0) {
+        if (flatsList.isEmpty()) {
             System.out.println("Список квартир пуст");
             return;
         }
         Scanner sc = new Scanner(System.in);
-        flatsList.stream().forEach((p) ->
+        flatsList.forEach((p) ->
                 System.out.println("Квартира №" + (flatsList.indexOf(p) + 1) + "\n" + p));
         System.out.print("Введите номер квартиры, которую хотите удалить-> ");
         int delIndex = sc.nextInt() - 1;
         if (delIndex < 0 || delIndex > flatsList.size())
             throw new MyExeption("Вы ввели неверный номер");
         flatsList.remove(delIndex);
-        System.out.println("Квартира удалена" +
-                "\n***************************");
+        System.out.println("Квартира удалена" + "\n***************************");
     }
 
     public void sortFlats() {
-        if (flatsList.size() == 0) {
+        if (flatsList.isEmpty()) {
             System.out.println("Список квартир пуст");
             return;
         }
-        ArrayList<Flat> sortedFlats = flatsList;
         System.out.println("Отсортированный список квартир:");
-        sortedFlats.stream().sorted().forEach((p) -> System.out.println(p));
+        flatsList.stream().sorted().forEach(System.out::println);
         System.out.println("***************************");
     }
 
     public void flatsFromRange() throws MyExeption {
-        if (flatsList.size() == 0) {
+        if (flatsList.isEmpty()) {
             System.out.println("Список квартир пуст");
             return;
         }
@@ -128,19 +125,15 @@ public class FlatsList {
         long count = flatsFromRange.stream().filter(o -> o.getPrice() >= from).filter(o -> o.getPrice() <= to).count();
         if (count != 0) {
             System.out.println("Результы поиска по данному диапозону цен");
-            flatsFromRange.stream().filter(o -> o.getPrice() >= from).filter(o -> o.getPrice() <= to).forEach((p) -> System.out.println(p));
+            flatsFromRange.stream().filter(o -> o.getPrice() >= from).filter(o -> o.getPrice() <= to).forEach(System.out::println);
             System.out.println("***************************");
-        } else System.out.println("По данному диапозону цен ничего не найдено" +
-                "\n***************************");
+        } else System.out.println("По данному диапозону цен ничего не найдено" + "\n***************************");
     }
 
     public void searchFlats(RequestsList requestsList) {
         File file = new File(searchFilePath);
 
         try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
             PrintWriter printWriter = new PrintWriter(file.getAbsoluteFile()); //PrintWriter обеспечит возможности записи в файл
             for (int i = 0; i < requestsList.getRequestListSize(); i++) {
                 int count = 0;//Считает, сколько квартир найдено по заявке
