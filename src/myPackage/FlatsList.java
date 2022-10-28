@@ -134,10 +134,14 @@ public class FlatsList {
                 System.out.println("Квартира №" + (flatsList.indexOf(p) + 1) + "\n" + p));
         System.out.print("Введите номер квартиры, которую хотите удалить-> ");
         int delIndex = sc.nextInt() - 1;
-        if (delIndex < 0 || delIndex > flatsList.size())
+        if (isFlatNumberExist(delIndex))
             throw new MyExeption("Вы ввели неверный номер");
         flatsList.remove(delIndex);
         System.out.println("Квартира удалена" + "\n***************************");
+    }
+
+    private boolean isFlatNumberExist(int flatNum){
+        return flatNum < 0 || flatNum > flatsList.size();
     }
 
     public void sortFlats() {
