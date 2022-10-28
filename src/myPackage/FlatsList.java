@@ -50,6 +50,7 @@ public class FlatsList {
     private static double extractMetrics(String metricsStr){
         return Double.parseDouble(metricsStr.substring(1, metricsStr.indexOf('м')));
     }
+
     private static int extractCountOfRooms(String countOfRoomsStr){
         return Integer.parseInt(countOfRoomsStr.substring(1, 2));
     }
@@ -79,8 +80,8 @@ public class FlatsList {
         System.out.print("Введите адрес квартиры(формат: р-н, улица, дом)-> ");
         String tempStr = sc.nextLine().trim();
         String[] address;
-        if (tempStr.matches("(.*), (.*), (.*)"))
-            address = tempStr.split("[, ]+", 0);
+        if (isAddressCorrect(tempStr))
+            address = extractAddress(tempStr);
         else throw new MyExeption("Вы ввели неверные данные или нарушили формат");
 
         System.out.print("Введите метраж квартиры в квадратных метрах-> ");
@@ -91,20 +92,36 @@ public class FlatsList {
         int floor = sc.nextInt();
         System.out.print("Введите колличество этажей в доме-> ");
         int countOfFloors = sc.nextInt();
-        if (floor > countOfFloors)
+        if (!isFloorCorrect(floor, countOfFloors))
             throw new MyExeption("Этаж квартиры не может быть больше колличества этажей в доме");
         System.out.print("Введите номер типа дома(1.Кирпичный 2.Панельный)-> ");
         int type = sc.nextInt();
         String typeOfHouse;
-        if (type == 1)
-            typeOfHouse = "Кирпичный";
-        else if (type == 2)
-            typeOfHouse = "Панельный";
-        else throw new MyExeption("Вы ввели неверный номер типа дома");
+
+        typeOfHouse = getTypeOfHouseName(type);
         System.out.print("Введите цену квартиры-> ");
         long price = sc.nextLong();
         flatsList.add(new Flat(metrics, countOfRooms, address, floor, typeOfHouse, countOfFloors, price));
         System.out.println("Квартира добавлена" + "\n***************************");
+    }
+
+    private static boolean isAddressCorrect(String addressStr){
+        return addressStr.matches("(.*), (.*), (.*)");
+    }
+
+    private static boolean isFloorCorrect(int floor, int countOfFloors){
+        return floor <= countOfFloors;
+    }
+
+    private static String getTypeOfHouseName(int type) throws MyExeption {
+        switch (type){
+            case 1:
+                return "Кирпичный";
+            case 2:
+                return "Панельный";
+            default:
+                throw new MyExeption("Вы ввели неверный номер типа дома");
+        }
     }
 
     public void removeFlat() throws MyExeption {
