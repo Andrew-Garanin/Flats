@@ -7,9 +7,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class MainClass {
+    private static final String flatsPath = "flats.txt";
     public static void main(String[] args) {
         try {
-            FlatsList flatsList = new FlatsList();
+            FlatsList flatsList = new FlatsList(flatsPath);
             RequestsList requestsList = new RequestsList();
             Scanner sc = new Scanner(System.in);
             int action;

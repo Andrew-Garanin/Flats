@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FlatsList {
-    private static final String flatsPath = "flats.txt";
+
     private static final String searchFilePath = "data.txt";
     private final ArrayList<Flat> flatsList;
 
-    public FlatsList() throws MyExeption, IOException {
-        flatsList = readFileWithFlats();
+    public FlatsList(String flatsPath) throws MyExeption, IOException {
+        flatsList = readFileWithFlats(flatsPath);
     }
 
-    public static ArrayList<Flat> readFileWithFlats() throws IOException, MyExeption {
+    public static ArrayList<Flat> readFileWithFlats(String flatsPath) throws IOException, MyExeption {
         ArrayList<Flat> flats = new ArrayList<Flat>();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(flatsPath));
         String tempStr;
@@ -29,25 +29,49 @@ public class FlatsList {
         while ((tempStr = bufferedReader.readLine()) != null) {
             if (tempStr.isEmpty())
                 continue;
-            metrics = Double.parseDouble(tempStr.substring(1, tempStr.indexOf('м')));
+            metrics = extractMetrics(tempStr);
+            countOfRooms = extractCountOfRooms(bufferedReader.readLine());
+            address = extractAddress(bufferedReader.readLine().substring(1));
+
             tempStr = bufferedReader.readLine();
-            countOfRooms = Integer.parseInt(tempStr.substring(1, 2));
-            tempStr = bufferedReader.readLine();
-            tempStr = tempStr.substring(1);
-            address = tempStr.split("[, ]+");
-            tempStr = bufferedReader.readLine();
-            floorOfFlat = Integer.parseInt(tempStr.substring(1, 2));
-            countOfFloors = Integer.parseInt(tempStr.substring(3, tempStr.indexOf(' ')));
-            tempStr = bufferedReader.readLine();
-            typeOfHouse = tempStr.substring(1);
-            tempStr = bufferedReader.readLine();
-            price = Long.parseLong(tempStr.substring(1));
+            floorOfFlat = extractFloorOfFlat(tempStr);
+            countOfFloors = extractCountOfFloors(tempStr);
+
+            typeOfHouse = extractTypeOfHouse(bufferedReader.readLine());
+            price = extractPrice(bufferedReader.readLine());
             flats.add(new Flat(metrics, countOfRooms, address, floorOfFlat, typeOfHouse, countOfFloors, price));
         }
         bufferedReader.close();
         if (flats.isEmpty())
             throw new MyExeption("Файл "+ flatsPath + " пуст");
         return flats;
+    }
+
+    private static double extractMetrics(String metricsStr){
+        return Double.parseDouble(metricsStr.substring(1, metricsStr.indexOf('м')));
+    }
+    private static int extractCountOfRooms(String countOfRoomsStr){
+        return Integer.parseInt(countOfRoomsStr.substring(1, 2));
+    }
+
+    private static String[] extractAddress(String addressStr){
+        return addressStr.split("[, ]+");
+    }
+
+    private static int extractFloorOfFlat(String floorOfFlatStr){
+        return Integer.parseInt(floorOfFlatStr.substring(1, 2));
+    }
+
+    private static int extractCountOfFloors(String countOfFloorsStr){
+        return Integer.parseInt(countOfFloorsStr.substring(3, countOfFloorsStr.indexOf(' ')));
+    }
+
+    private static String extractTypeOfHouse(String typeOfHouseStr){
+        return typeOfHouseStr.substring(1);
+    }
+
+    private static long extractPrice(String priceStr){
+        return Long.parseLong(priceStr.substring(1));
     }
 
     public void addFlat() throws MyExeption {
