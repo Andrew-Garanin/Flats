@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class FlatsList {
 
-    private static final String searchFilePath = "data.txt";
+
     private final ArrayList<Flat> flatsList;
 
     public FlatsList(String flatsPath) throws MyExeption, IOException {
@@ -190,7 +190,7 @@ public class FlatsList {
         return flatsList.stream().filter(flat -> flat.getPrice() >= from).filter(flat -> flat.getPrice() <= to).count();
     }
 
-    public void searchFlats(RequestsList requestsList) {
+    public void searchFlats(RequestsList requestsList, String searchFilePath) {
         File file = new File(searchFilePath);
 
         try {
@@ -205,7 +205,7 @@ public class FlatsList {
                 System.out.println("Дал следущие результаты->");
                 printWriter.println("Дал следущие результаты->");
                 for (Flat flat : flatsList) {
-                    if (flat.getCountOfRooms() == request.getCountOfRooms() && flat.getArea().equals(request.getArea()) && flat.getTypeOfHouse().equals(request.getTypeOfHouse())) {
+                    if (isFlatCorrespondsToRequest(flat, request)) {
                         System.out.println(flat);
                         printWriter.println(flat);
                         count++;
@@ -225,5 +225,11 @@ public class FlatsList {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean isFlatCorrespondsToRequest(Flat flat, Request request){
+        return flat.getCountOfRooms() == request.getCountOfRooms() &&
+               flat.getArea().equals(request.getArea()) &&
+               flat.getTypeOfHouse().equals(request.getTypeOfHouse());
     }
 }

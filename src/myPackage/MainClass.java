@@ -8,6 +8,8 @@ import java.util.*;
 
 public class MainClass {
     private static final String flatsPath = "flats.txt";
+    private static final String searchFilePath = "data.txt";
+
     public static void main(String[] args) {
         try {
             FlatsList flatsList = new FlatsList(flatsPath);
@@ -41,7 +43,7 @@ public class MainClass {
                             requestsList.removeRequest();
                             break;
                         case 5:
-                            flatsList.searchFlats(requestsList);
+                            flatsList.searchFlats(requestsList, searchFilePath);
                             break;
                         case 6:
                             flatsList.sortFlats();
