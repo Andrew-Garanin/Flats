@@ -162,17 +162,32 @@ public class FlatsList {
         Scanner sc = new Scanner(System.in);
         System.out.print("Введите диапозон цены(формат: от-до)->");
         String range = sc.next().trim();
-        long from = Long.parseLong(range.substring(0, range.indexOf('-')));
-        long to = Long.parseLong(range.substring(range.indexOf('-') + 1));
-        if (from < 0 || to < 0 || from > to)
+        long from =extractMinPrice(range);
+        long to =extractMaxPrice(range);
+        if (!isRangeCorrect(from, to))
             throw new MyExeption("Ошибка при вводе цены");
-        ArrayList<Flat> flatsFromRange = flatsList;
-        long count = flatsFromRange.stream().filter(o -> o.getPrice() >= from).filter(o -> o.getPrice() <= to).count();
+        long count = countFlatsFromRange(flatsList, from, to);
         if (count != 0) {
             System.out.println("Результы поиска по данному диапозону цен");
-            flatsFromRange.stream().filter(o -> o.getPrice() >= from).filter(o -> o.getPrice() <= to).forEach(System.out::println);
+            flatsList.stream().filter(o -> o.getPrice() >= from).filter(o -> o.getPrice() <= to).forEach(System.out::println);
             System.out.println("***************************");
         } else System.out.println("По данному диапозону цен ничего не найдено" + "\n***************************");
+    }
+
+    private long extractMinPrice(String rangeStr){
+        return Long.parseLong(rangeStr.substring(0, rangeStr.indexOf('-')));
+    }
+
+    private long extractMaxPrice(String rangeStr){
+        return Long.parseLong(rangeStr.substring(rangeStr.indexOf('-') + 1));
+    }
+
+    private boolean isRangeCorrect(long from, long to){
+        return from >= 0 || to >= 0 || from <= to;
+    }
+
+    private long countFlatsFromRange(ArrayList<Flat> flatsList, long from, long to){
+        return flatsList.stream().filter(flat -> flat.getPrice() >= from).filter(flat -> flat.getPrice() <= to).count();
     }
 
     public void searchFlats(RequestsList requestsList) {
