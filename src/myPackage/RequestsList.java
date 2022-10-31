@@ -64,15 +64,21 @@ public class RequestsList {
         String area = sc.next().trim();
         System.out.print("Введите номер типа дома(1.Кирпичный 2.Панельный)-> ");
         int type = sc.nextInt();
-        String typeOfHouse;
-        if (type == 1)
-            typeOfHouse = "Кирпичный";
-        else if (type == 2)
-            typeOfHouse = "Панельный";
-        else throw new MyExeption("Вы ввели неверный номер типа дома");
+        String typeOfHouse= getTypeOfHouseName(type);
         requestsList.add(new Request(countOfRooms, area, typeOfHouse));
         System.out.println("Заявка добавлена" +
                 "\n***************************");
+    }
+
+    private static String getTypeOfHouseName(int type) throws MyExeption {
+        switch (type){
+            case 1:
+                return "Кирпичный";
+            case 2:
+                return "Панельный";
+            default:
+                throw new MyExeption("Вы ввели неверный номер типа дома");
+        }
     }
 
     public void removeRequest() throws MyExeption {
