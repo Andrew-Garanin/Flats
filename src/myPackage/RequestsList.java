@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class RequestsList {
-    private static final String requestsPath = "requests.txt";
-
     private final ArrayList<Request> requestsList;
 
-    public RequestsList() throws MyExeption, IOException {
-        requestsList = readFileWithRequests();
+    public RequestsList(String requestsPath) throws MyExeption, IOException {
+        requestsList = readFileWithRequests(requestsPath);
     }
 
     public Request getRequestByIndex(int index){
@@ -25,7 +23,7 @@ public class RequestsList {
         return requestsList.size();
     }
 
-    public static ArrayList<Request> readFileWithRequests() throws IOException, MyExeption {
+    public static ArrayList<Request> readFileWithRequests(String requestsPath) throws IOException, MyExeption {
         ArrayList<Request> list = new ArrayList<Request>();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(requestsPath));
         String tempStr;
@@ -35,17 +33,27 @@ public class RequestsList {
         while ((tempStr = bufferedReader.readLine()) != null) {
             if (tempStr.isEmpty())
                 continue;
-            countOfRooms = Integer.parseInt(tempStr.substring(0, 1));
-            tempStr = bufferedReader.readLine();
-            area = tempStr.substring(0, tempStr.indexOf(' '));
-            tempStr = bufferedReader.readLine();
-            typeOfHouse = tempStr.substring(0, tempStr.indexOf(' '));
+            countOfRooms = extractCountOfRooms(tempStr);
+            area = extractArea(bufferedReader.readLine());
+            typeOfHouse = extractTypeOfHouse(bufferedReader.readLine());
             list.add(new Request(countOfRooms, area, typeOfHouse));
         }
         bufferedReader.close();
         if (list.isEmpty())
             throw new MyExeption("Файл " + requestsPath + " пуст");
         return list;
+    }
+
+    private static int extractCountOfRooms(String countOfRoomsStr){
+        return Integer.parseInt(countOfRoomsStr.substring(0, 1));
+    }
+
+    private static String extractArea(String areaStr){
+        return areaStr.substring(0, areaStr.indexOf(' '));
+    }
+
+    private static String extractTypeOfHouse(String typeOfHouseStr){
+        return typeOfHouseStr.substring(0, typeOfHouseStr.indexOf(' '));
     }
 
     public void addRequest() throws MyExeption {

@@ -8,12 +8,13 @@ import java.util.*;
 
 public class MainClass {
     private static final String flatsPath = "flats.txt";
+    private static final String requestsPath = "requests.txt";
     private static final String searchFilePath = "data.txt";
 
     public static void main(String[] args) {
         try {
             FlatsList flatsList = new FlatsList(flatsPath);
-            RequestsList requestsList = new RequestsList();
+            RequestsList requestsList = new RequestsList(requestsPath);
             Scanner sc = new Scanner(System.in);
             int action;
             while (true) {
