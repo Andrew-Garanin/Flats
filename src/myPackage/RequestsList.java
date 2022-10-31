@@ -91,15 +91,15 @@ public class RequestsList {
                 System.out.println("Заявка №" + (requestsList.indexOf(p) + 1) + "\n" + p));
         System.out.print("Введите номер заявки, которую хотите удалить-> ");
         int delIndex = sc.nextInt() - 1;
-        if (isRequestNumberExist(delIndex))
+        if (!isRequestNumberExist(delIndex, requestsList.size()))
             throw new MyExeption("Вы ввели неверный номер");
         requestsList.remove(delIndex);
         System.out.println("Заявка удалена" +
                 "\n***************************");
     }
 
-    private boolean isRequestNumberExist(int flatNum){
-        return flatNum < 0 || flatNum > requestsList.size();
+    private boolean isRequestNumberExist(int requestNum, int requestsListSize){
+        return Utils.isEnteredNumberExist(requestNum, requestsListSize);
     }
 
     public void sortRequests() {
@@ -108,8 +108,7 @@ public class RequestsList {
             return;
         }
         System.out.println("Отсортированный список заявок:");
-        ArrayList<Request> sortedRequests = requestsList;
-        sortedRequests.stream().sorted().forEach((p) -> System.out.println(p));
+        requestsList.stream().sorted().forEach(System.out::println);
         System.out.println("***************************");
     }
 }
