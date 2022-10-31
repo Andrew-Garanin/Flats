@@ -87,15 +87,19 @@ public class RequestsList {
             return;
         }
         Scanner sc = new Scanner(System.in);
-        requestsList.stream().forEach((p) ->
+        requestsList.forEach((p) ->
                 System.out.println("Заявка №" + (requestsList.indexOf(p) + 1) + "\n" + p));
         System.out.print("Введите номер заявки, которую хотите удалить-> ");
         int delIndex = sc.nextInt() - 1;
-        if (delIndex < 0 || delIndex > requestsList.size())
+        if (isRequestNumberExist(delIndex))
             throw new MyExeption("Вы ввели неверный номер");
         requestsList.remove(delIndex);
         System.out.println("Заявка удалена" +
                 "\n***************************");
+    }
+
+    private boolean isRequestNumberExist(int flatNum){
+        return flatNum < 0 || flatNum > requestsList.size();
     }
 
     public void sortRequests() {
